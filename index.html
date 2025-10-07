@@ -81,7 +81,6 @@
     font-size: 1.2em;
     transform: rotateY(180deg);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    background: linear-gradient(135deg, #ff758c, #ff7eb3);
   }
 
   button {
@@ -120,8 +119,10 @@
 
 <div class="card" id="questionCard">
   <div class="card-inner">
-    <div class="card-front"></div>
-    <div class="card-back" id="cardBack">Click below to draw a question!</div>
+    <div class="card-front"></div> <!-- still hidden -->
+    <div class="card-back" id="cardBack">
+      Click below to draw a question!
+    </div>
   </div>
 </div>
 
@@ -135,7 +136,7 @@
 
 <script>
 const defaultQuestions = [
-  "1. What made you feel most loved this week?",
+"1. What made you feel most loved this week?",
 "2. What do you find most attractive about me?",
 "3. What’s one fantasy you’ve never shared?",
 "4. What’s your favorite memory together?",
@@ -304,7 +305,7 @@ const defaultQuestions = [
 "167. What’s a secret wish you have for us?",
 "168. What’s a thing we could do to make each other smile today?",
 "169. What’s one thing you hope we never forget?",
-"170. What’s your favorite way to say ‘I love you’"
+"170. What’s your favorite way to say ‘I love you’?"
 ];
 
 // Gradients for random card backs
@@ -333,9 +334,10 @@ function saveState() {
   localStorage.setItem('usedQuestions', JSON.stringify(usedQuestions));
 }
 
-// Ensure initial text on first load
-cardBack.textContent = "Click below to draw a question!";
-questionCard.classList.remove('show');
+// Set initial back card text if empty
+if (!cardBack.textContent || cardBack.textContent.trim() === "") {
+  cardBack.textContent = "Click below to draw a question!";
+}
 
 function drawQuestion() {
   if (questions.length === 0) {
@@ -344,18 +346,14 @@ function drawQuestion() {
     const index = Math.floor(Math.random() * questions.length);
     const question = questions.splice(index, 1)[0];
     usedQuestions.push(question);
-
-    // Reset card flip
-    questionCard.classList.remove('show');
-    void questionCard.offsetWidth; // force reflow for animation
-
     cardBack.textContent = question;
 
     // Random gradient
     const gradIndex = Math.floor(Math.random() * gradients.length);
     cardBack.style.background = gradients[gradIndex];
+  }
 
-    // Trigger flip animation
+  if (!questionCard.classList.contains('show')) {
     questionCard.classList.add('show');
   }
 
@@ -365,8 +363,7 @@ function drawQuestion() {
 function resetDeck() {
   questions = [...defaultQuestions];
   usedQuestions = [];
-  cardBack.textContent = "Click below to draw a question!";
-  questionCard.classList.remove('show');
+  cardBack.textContent = "Click below to draw a question!"; // restore initial text
   saveState();
 }
 
