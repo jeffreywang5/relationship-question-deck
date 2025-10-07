@@ -70,7 +70,7 @@
     box-sizing: border-box;
   }
 
-  /* front is hidden completely now to remove flash */
+  /* front is hidden completely to prevent flash */
   .card-front {
     visibility: hidden;
   }
@@ -119,8 +119,10 @@
 
 <div class="card" id="questionCard">
   <div class="card-inner">
-    <div class="card-front">Click below to draw a question!</div>
-    <div class="card-back" id="cardBack"></div>
+    <div class="card-front"></div> <!-- hidden front -->
+    <div class="card-back" id="cardBack">
+      Click below to draw a question!
+    </div>
   </div>
 </div>
 
@@ -357,7 +359,7 @@ function drawQuestion() {
 function resetDeck() {
   questions = [...defaultQuestions];
   usedQuestions = [];
-  cardBack.textContent = "";
+  cardBack.textContent = "Click below to draw a question!"; // restore initial text
   saveState();
 }
 
