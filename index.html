@@ -32,7 +32,6 @@
   }
 
   .card-inner {
-    background: white;
     color: #333;
     border-radius: 20px;
     padding: 30px;
@@ -50,10 +49,6 @@
     transform: rotateY(180deg);
     animation: bounce 0.5s ease;
   }
-
-  .card.show .card-front {
-  visibility: hidden; /* hide front when flipped */
-}
 
   @keyframes bounce {
     0% { transform: rotateY(180deg) scale(0.9); }
@@ -75,10 +70,9 @@
     box-sizing: border-box;
   }
 
+  /* front is hidden completely now to remove flash */
   .card-front {
-    background: #fff;
-    color: #333;
-    font-weight: 500;
+    visibility: hidden;
   }
 
   .card-back {
@@ -312,7 +306,7 @@ const defaultQuestions = [
 "170. What’s your favorite way to say ‘I love you’?"
 ];
 
-// Predefined gradients for card back
+// Gradients for random card backs
 const gradients = [
   "linear-gradient(135deg, #ff758c, #ff7eb3)",
   "linear-gradient(135deg, #43cea2, #185a9d)",
@@ -352,9 +346,10 @@ function drawQuestion() {
     cardBack.style.background = gradients[gradIndex];
   }
 
-  questionCard.classList.remove('show');
-  void questionCard.offsetWidth;
-  questionCard.classList.add('show');
+  // Only add .show once to prevent flash
+  if (!questionCard.classList.contains('show')) {
+    questionCard.classList.add('show');
+  }
 
   saveState();
 }
@@ -363,7 +358,6 @@ function resetDeck() {
   questions = [...defaultQuestions];
   usedQuestions = [];
   cardBack.textContent = "";
-  questionCard.classList.remove('show');
   saveState();
 }
 
@@ -383,5 +377,3 @@ addButton.addEventListener('click', addQuestion);
 </script>
 </body>
 </html>
-
-
