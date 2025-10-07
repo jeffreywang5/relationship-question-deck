@@ -119,7 +119,7 @@
 
 <div class="card" id="questionCard">
   <div class="card-inner">
-    <div class="card-front"></div> <!-- hidden front -->
+    <div class="card-front"></div> <!-- still hidden -->
     <div class="card-back" id="cardBack">
       Click below to draw a question!
     </div>
@@ -334,6 +334,11 @@ function saveState() {
   localStorage.setItem('usedQuestions', JSON.stringify(usedQuestions));
 }
 
+// Set initial back card text if empty
+if (!cardBack.textContent || cardBack.textContent.trim() === "") {
+  cardBack.textContent = "Click below to draw a question!";
+}
+
 function drawQuestion() {
   if (questions.length === 0) {
     cardBack.textContent = "🎉 You've gone through all the questions! Reset to start over.";
@@ -348,7 +353,6 @@ function drawQuestion() {
     cardBack.style.background = gradients[gradIndex];
   }
 
-  // Only add .show once to prevent flash
   if (!questionCard.classList.contains('show')) {
     questionCard.classList.add('show');
   }
@@ -379,3 +383,4 @@ addButton.addEventListener('click', addQuestion);
 </script>
 </body>
 </html>
+
