@@ -70,7 +70,6 @@
     box-sizing: border-box;
   }
 
-  /* front is hidden completely to prevent flash */
   .card-front {
     visibility: hidden;
   }
@@ -79,8 +78,8 @@
     color: #fff;
     font-weight: 600;
     font-size: 1.2em;
-    transform: rotateY(180deg);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border-radius: 20px;
   }
 
   button {
@@ -119,10 +118,8 @@
 
 <div class="card" id="questionCard">
   <div class="card-inner">
-    <div class="card-front"></div> <!-- still hidden -->
-    <div class="card-back" id="cardBack">
-      Click below to draw a question!
-    </div>
+    <div class="card-front"></div>
+    <div class="card-back" id="cardBack">Click below to draw a question!</div>
   </div>
 </div>
 
@@ -305,10 +302,9 @@ const defaultQuestions = [
 "167. What’s a secret wish you have for us?",
 "168. What’s a thing we could do to make each other smile today?",
 "169. What’s one thing you hope we never forget?",
-"170. What’s your favorite way to say ‘I love you’?"
+"170. What’s your favorite way to say ‘I love you’"
 ];
 
-// Gradients for random card backs
 const gradients = [
   "linear-gradient(135deg, #ff758c, #ff7eb3)",
   "linear-gradient(135deg, #43cea2, #185a9d)",
@@ -329,15 +325,15 @@ const resetButton = document.getElementById('resetButton');
 const addButton = document.getElementById('addButton');
 const newQuestionInput = document.getElementById('newQuestion');
 
+// Save state to localStorage
 function saveState() {
   localStorage.setItem('questions', JSON.stringify(questions));
   localStorage.setItem('usedQuestions', JSON.stringify(usedQuestions));
 }
 
-// Set initial back card text if empty
-if (!cardBack.textContent || cardBack.textContent.trim() === "") {
-  cardBack.textContent = "Click below to draw a question!";
-}
+// Ensure initial card shows start text
+cardBack.textContent = "Click below to draw a question!";
+questionCard.classList.remove('show');
 
 function drawQuestion() {
   if (questions.length === 0) {
@@ -348,7 +344,6 @@ function drawQuestion() {
     usedQuestions.push(question);
     cardBack.textContent = question;
 
-    // Random gradient
     const gradIndex = Math.floor(Math.random() * gradients.length);
     cardBack.style.background = gradients[gradIndex];
   }
@@ -363,7 +358,8 @@ function drawQuestion() {
 function resetDeck() {
   questions = [...defaultQuestions];
   usedQuestions = [];
-  cardBack.textContent = "Click below to draw a question!"; // restore initial text
+  cardBack.textContent = "Click below to draw a question!";
+  questionCard.classList.remove('show');
   saveState();
 }
 
@@ -383,4 +379,3 @@ addButton.addEventListener('click', addQuestion);
 </script>
 </body>
 </html>
-
