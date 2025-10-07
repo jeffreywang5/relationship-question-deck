@@ -51,6 +51,10 @@
     animation: bounce 0.5s ease;
   }
 
+  .card.show .card-front {
+  visibility: hidden; /* hide front when flipped */
+}
+
   @keyframes bounce {
     0% { transform: rotateY(180deg) scale(0.9); }
     50% { transform: rotateY(180deg) scale(1.05); }
@@ -379,4 +383,5 @@ addButton.addEventListener('click', addQuestion);
 </script>
 </body>
 </html>
+
 
