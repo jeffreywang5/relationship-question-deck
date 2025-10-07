@@ -70,6 +70,7 @@
     box-sizing: border-box;
   }
 
+  /* front is hidden completely to prevent flash */
   .card-front {
     visibility: hidden;
   }
@@ -78,8 +79,9 @@
     color: #fff;
     font-weight: 600;
     font-size: 1.2em;
+    transform: rotateY(180deg);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    border-radius: 20px;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
   }
 
   button {
@@ -133,7 +135,7 @@
 
 <script>
 const defaultQuestions = [
-"1. What made you feel most loved this week?",
+  "1. What made you feel most loved this week?",
 "2. What do you find most attractive about me?",
 "3. What’s one fantasy you’ve never shared?",
 "4. What’s your favorite memory together?",
@@ -305,6 +307,7 @@ const defaultQuestions = [
 "170. What’s your favorite way to say ‘I love you’"
 ];
 
+// Gradients for random card backs
 const gradients = [
   "linear-gradient(135deg, #ff758c, #ff7eb3)",
   "linear-gradient(135deg, #43cea2, #185a9d)",
@@ -325,13 +328,12 @@ const resetButton = document.getElementById('resetButton');
 const addButton = document.getElementById('addButton');
 const newQuestionInput = document.getElementById('newQuestion');
 
-// Save state to localStorage
 function saveState() {
   localStorage.setItem('questions', JSON.stringify(questions));
   localStorage.setItem('usedQuestions', JSON.stringify(usedQuestions));
 }
 
-// Ensure initial card shows start text
+// Ensure initial text on first load
 cardBack.textContent = "Click below to draw a question!";
 questionCard.classList.remove('show');
 
@@ -342,13 +344,18 @@ function drawQuestion() {
     const index = Math.floor(Math.random() * questions.length);
     const question = questions.splice(index, 1)[0];
     usedQuestions.push(question);
+
+    // Reset card flip
+    questionCard.classList.remove('show');
+    void questionCard.offsetWidth; // force reflow for animation
+
     cardBack.textContent = question;
 
+    // Random gradient
     const gradIndex = Math.floor(Math.random() * gradients.length);
     cardBack.style.background = gradients[gradIndex];
-  }
 
-  if (!questionCard.classList.contains('show')) {
+    // Trigger flip animation
     questionCard.classList.add('show');
   }
 
