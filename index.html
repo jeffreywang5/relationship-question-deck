@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relationship Question Deck 💞</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  h1 {
+    color: #fff;
+    font-size: 2.2em;
+    margin-bottom: 10px;
+  }
+  .card {
+    background: white;
+    color: #333;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 500px;
+    min-height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    transition: transform 0.3s ease;
+  }
+  button {
+    background: #ff6f91;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    font-size: 1em;
+    margin: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  button:hover {
+    background: #ff477e;
+  }
+  #add-container {
+    margin-top: 15px;
+  }
+  input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    width: 70%;
+    margin-right: 5px;
+  }
+</style>
+</head>
+<body>
+  <h1>💞 Relationship Question Deck 💞</h1>
+  <div class="card" id="questionCard">Click below to draw a question!</div>
+  <button id="drawButton">🎴 Draw Question</button>
+  <button id="resetButton">🔁 Reset Deck</button>
+  <div id="add-container">
+    <input id="newQuestion" placeholder="Add your own question..." />
+    <button id="addButton">➕ Add</button>
+  </div>
+
+<script>
+const defaultQuestions = [
+  "What made you feel most loved this week?",
+  "What do you find most attractive about me?",
+  "What’s one fantasy you’ve never shared?",
+  "What’s your favorite memory together?",
+  "When did you first know you loved me?",
+  "What’s something new you’d like to try together?",
+  "How can I make you feel more appreciated?",
+  "What song reminds you of us?",
+  "What’s your love language?",
+  "If we could teleport anywhere for a date, where would we go?"
+];
+
+let questions = JSON.parse(localStorage.getItem("deck_questions")) || defaultQuestions;
+let revealed = JSON.parse(localStorage.getItem("deck_revealed")) || [];
+
+function saveProgress() {
+  localStorage.setItem("deck_questions", JSON.stringify(questions));
+  localStorage.setItem("deck_revealed", JSON.stringify(revealed));
+}
+
+function drawQuestion() {
+  const remaining = questions.filter(q => !revealed.includes(q));
+  const card = document.getElementById("questionCard");
+
+  if (remaining.length === 0) {
+    card.textContent = "You’ve revealed all the questions! 🔁 Press Reset to start again.";
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * remaining.length);
+  const question = remaining[randomIndex];
+  revealed.push(question);
+  saveProgress();
+  card.textContent = question;
+}
+
+function resetDeck() {
+  revealed = [];
+  saveProgress();
+  document.getElementById("questionCard").textContent = "Deck reset! 🎴 Draw a new question.";
+}
+
+function addQuestion() {
+  const input = document.getElementById("newQuestion");
+  const newQ = input.value.trim();
+  if (!newQ) return;
+  questions.push(newQ);
+  input.value = "";
+  saveProgress();
+  alert("Question added!");
+}
+
+document.getElementById("drawButton").addEventListener("click", drawQuestion);
+document.getElementById("resetButton").addEventListener("click", resetDeck);
+document.getElementById("addButton").addEventListener("click", addQuestion);
+</script>
+</body>
+</html>
